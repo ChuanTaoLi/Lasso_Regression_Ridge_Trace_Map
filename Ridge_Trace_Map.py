@@ -21,7 +21,7 @@ from sklearn.metrics import accuracy_score
 
 
 def lasso_regression(train, test, alpha):
-    lassoreg = Lasso(alpha=alpha, max_iter=500, fit_intercept=True)
+    lassoreg = Lasso(alpha=alpha, max_iter=1000, fit_intercept=True)
     lassoreg.fit(train.iloc[:, :-1], train['label'])
     feature_count = np.sum(lassoreg.coef_ != 0)  # 计算该alpha下筛选出的特征数量
     y_pred = lassoreg.predict(test.iloc[:, :-1])
@@ -35,7 +35,7 @@ def lasso_regression(train, test, alpha):
 
 
 '''记录不同alpha下的准确率以及各特征的回归系数'''
-alpha_lasso = np.linspace(0, 2.5, 500)
+alpha_lasso = np.linspace(0, 0.6, 1000)
 # 定义coef_matrix_lasso每列的标签，分别为alpha、准确率以及数据集的各特征名称
 col = ["alpha", "accuracy", "feature_count"] + list(X.columns)
 # 将采样的alpha数值插入到占位符上
