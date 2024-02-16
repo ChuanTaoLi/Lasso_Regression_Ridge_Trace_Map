@@ -9,14 +9,11 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 '''加载数据集'''
-data = pd.read_csv(r'D:\01代码收集\Lasso\lasso_data.csv')
+data = pd.read_excel(r'D:\01代码收集\Lasso\NSLKDD_All.xlsx')
 X = data.iloc[:, 0:-1]
 y = data.iloc[:, -1]
-
-'''划分数据集'''
-from sklearn.model_selection import train_test_split
-
-diabete_train, diabete_test = train_test_split(data, test_size=0.2, random_state=514)
+train = pd.read_csv(r'D:\01代码收集\Lasso\train_data.csv')
+test = pd.read_csv(r'D:\01代码收集\Lasso\test_data.csv')
 
 '''定义lasso回归函数'''
 from sklearn.linear_model import Lasso
@@ -38,7 +35,7 @@ def lasso_regression(train, test, alpha):
 
 
 '''记录不同alpha下的准确率以及各特征的回归系数'''
-alpha_lasso = np.linspace(0, 2.5, 200)
+alpha_lasso = np.linspace(0, 2.5, 500)
 # 定义coef_matrix_lasso每列的标签，分别为alpha、准确率以及数据集的各特征名称
 col = ["alpha", "accuracy", "feature_count"] + list(X.columns)
 # 将采样的alpha数值插入到占位符上
@@ -47,7 +44,7 @@ ind = ["alpha_%.4g" % alpha_lasso[i] for i in range(0, len(alpha_lasso))]
 coef_matrix_lasso = pd.DataFrame(index=ind, columns=col)
 # 调用函数，将函数返回的结果录入
 for i in range(len(alpha_lasso)):
-    coef_matrix_lasso.iloc[i,] = lasso_regression(diabete_train, diabete_test, alpha_lasso[i])
+    coef_matrix_lasso.iloc[i,] = lasso_regression(train, test, alpha_lasso[i])
 coef_matrix_lasso.to_excel(r'coef_matrix_lasso.xlsx', index=True)
 
 '''绘制岭迹图'''
