@@ -1,0 +1,19 @@
+import pandas as pd
+import numpy as np
+import warnings
+from sklearn.exceptions import ConvergenceWarning
+
+warnings.filterwarnings("ignore", category=ConvergenceWarning)
+
+'''加载数据集'''
+data = pd.read_excel(r'D:\01代码收集\Lasso\NSLKDD_All.xlsx')
+X = data.iloc[:, 0:-1]
+y = data.iloc[:, -1]
+
+'''交叉验证选择最佳alpha'''
+alpha = np.linspace(0, 0.6, 1000)
+from sklearn.linear_model import LassoCV
+
+lasso_cv = LassoCV(alphas=alpha, cv=5, max_iter=1000)
+lasso_cv.fit(X, y)
+print(lasso_cv.alpha_)  # 0.0012012012012012011
